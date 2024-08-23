@@ -1,4 +1,14 @@
-const lightMeBro = async () => {
+async function lightMeBro(){
+  const CUSTOM_ELEMENT_NAME = "light-me-bro";
+  const DATA_ATTRIBUTE = "data-lightmebro";
+  const TARGET_DATA_ATTRIBUTE = "[data-lightmebro]";
+  const SHADOW_DOM_CONTAINER_CLASS = "lightmebro__container";
+  const SHADOW_DOM_CONTAINER_SELECTOR = ".lightmebro__container";
+  const SHADOW_DOM_IMG_CLASS = "lightmebro__img";
+  const SHADOW_DOM_IMG_SELECTOR = ".lightmebro__img";
+  const SHADOW_DOM_IMG_PLACEHOLDER = "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
+
+  // Shadow DOM Stylesheet
   const styles = `
     :host {
       display: none;
@@ -30,14 +40,13 @@ const lightMeBro = async () => {
   const sheet = new CSSStyleSheet();
   sheet.replaceSync(styles);
 
-  const placeholderImage = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
-
   const htmlTemplate = `
-    <div class="lightmebro__container">
-      <img class="lightmebro__img" src="${placeholderImage}" alt="Lightbox Image">
+    <div class="${SHADOW_DOM_CONTAINER_CLASS}">
+      <img class="${SHADOW_DOM_IMG_CLASS}" src="${SHADOW_DOM_IMG_PLACEHOLDER}" alt="Lightbox Image">
     </div>
   `;
 
+  // Custom HTML Element
   class LightMeBro extends HTMLElement {
     static observedAttributes = ['open'];
 
@@ -70,7 +79,7 @@ const lightMeBro = async () => {
     connectedCallback() {
       const shadow = this.shadowRoot;
 
-      shadow?.querySelector('.lightmebro__container')?.addEventListener("click", (e: Event) => {
+      shadow?.querySelector(SHADOW_DOM_CONTAINER_SELECTOR)?.addEventListener("click", (e: Event) => {
         if (e instanceof MouseEvent) {
           this.closeLightbox();
         }
@@ -82,7 +91,7 @@ const lightMeBro = async () => {
     }
 
     set setLightboxImage(imageUrl: string | null) {
-      const imgElement = this.shadowRoot?.querySelector('.lightmebro__img') as HTMLImageElement;
+      const imgElement = this.shadowRoot?.querySelector(SHADOW_DOM_IMG_SELECTOR) as HTMLImageElement;
 
       if (imgElement && imageUrl) {
         imgElement.src = imageUrl;
@@ -92,25 +101,28 @@ const lightMeBro = async () => {
   }
 
   // Define the custom element
-  customElements.define("light-me-bro", LightMeBro);
+  customElements.define(CUSTOM_ELEMENT_NAME, LightMeBro);
 
   // Attach the Custom Element to the DOM
-  const element = document.createElement("light-me-bro");
+  const element = document.createElement(CUSTOM_ELEMENT_NAME);
   document.querySelector('body')?.appendChild(element);
 
-  // Add Event Delegator to invoke custom element
-  document.addEventListener("click", (e: MouseEvent) => {
+  // Event Delegator to invoke custom element
+  const openLightbox = (e: MouseEvent)=>{
     const target = e.target as HTMLElement;
-    const lightElement = target.closest('[data-lightmebro]') as HTMLElement | null;
+    const lightElement = target.closest(TARGET_DATA_ATTRIBUTE) as HTMLElement | null;
 
     if (!lightElement) return;
-    const imageUrl = lightElement.getAttribute("data-lightmebro");
-    const lightbox = document.querySelector("light-me-bro") as LightMeBro | null;
+    const imageUrl = lightElement.getAttribute(DATA_ATTRIBUTE);
+    const lightbox = document.querySelector(CUSTOM_ELEMENT_NAME) as LightMeBro | null;
 
     if (!lightbox || !imageUrl) return;
 
     lightbox.setLightboxImage = imageUrl;
-  });
+  };
+
+  // All event listeners
+  document.addEventListener("click", openLightbox);
 };
 
 document.addEventListener("DOMContentLoaded", lightMeBro);

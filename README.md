@@ -1,9 +1,10 @@
 # Light Me, Bro.
 A very simple web component based strategy to the Lightbox.  
+The script is small enough that you should be able to edit it if needed.  
 
 ## Installation
 
-All ready-to-use files are located in the /dist directory.  
+All ready-to-use files are located in the `/dist` directory.  
 Use either the main.js file or the minified main.min.js file.  
 
 ```html
@@ -59,7 +60,14 @@ light-me-bro {
 }
 ```
 
+Ive left styling of your elements up to you.  
+Meaning, things like cursors on hovers I've omitted.  
+It's all function over form here.  
+
 ## Details
 This uses the [Web Component Spec](https://developer.mozilla.org/en-US/docs/Web/API/Web_components).  
 The [CSS Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM).  
 The [Constructable Stylesheets API](https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleSheet/CSSStyleSheet).  
+
+## Gotchas
+- On Anchor Elements with fragments such as `<a href="#">`. I did not utilize the `preventDefault` method to stop upward scrolling on click. This seems to be a common enough practice that I'm assuming this is already being done elsewhere in your codebase. I may change this in the future.
