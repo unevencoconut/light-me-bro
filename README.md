@@ -1,6 +1,7 @@
 # Light Me, Bro.
 A very simple web component based strategy to the Lightbox.  
 The script is small enough that you should be able to edit it if needed.  
+[Live Demo Found Here](https://www.marksilva.dev/light-me-bro/)
 
 ## Installation
 
